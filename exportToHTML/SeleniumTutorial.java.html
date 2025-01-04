@@ -1,0 +1,218 @@
+<html>
+<head>
+<title>SeleniumTutorial.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #0033b3;}
+.s1 { color: #080808;}
+.s2 { color: #8c8c8c; font-style: italic;}
+.s3 { color: #067d17;}
+.s4 { color: #1750eb;}
+</style>
+</head>
+<body bgcolor="#ffffff">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#c0c0c0" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+SeleniumTutorial.java</font>
+</center></td></tr></table>
+<pre><span class="s0">import </span><span class="s1">io.github.bonigarcia.wdm.WebDriverManager;</span>
+<span class="s0">import </span><span class="s1">org.openqa.selenium.*;</span>
+
+<span class="s0">import </span><span class="s1">org.openqa.selenium.chrome.ChromeDriver;</span>
+<span class="s0">import </span><span class="s1">org.openqa.selenium.interactions.Actions;</span>
+<span class="s0">import </span><span class="s1">org.openqa.selenium.support.ui.ExpectedConditions;</span>
+<span class="s0">import </span><span class="s1">org.openqa.selenium.support.ui.Select;</span>
+<span class="s0">import </span><span class="s1">org.openqa.selenium.support.ui.WebDriverWait;</span>
+
+<span class="s0">import </span><span class="s1">javax.swing.*;</span>
+<span class="s0">import </span><span class="s1">java.awt.*;</span>
+<span class="s0">import </span><span class="s1">java.awt.event.KeyEvent;</span>
+<span class="s0">import </span><span class="s1">java.io.FileNotFoundException;</span>
+<span class="s0">import </span><span class="s1">java.io.FileReader;</span>
+<span class="s0">import </span><span class="s1">java.io.FilenameFilter;</span>
+<span class="s0">import </span><span class="s1">java.io.IOException;</span>
+<span class="s0">import </span><span class="s1">java.time.Duration;</span>
+<span class="s0">import </span><span class="s1">java.util.Properties;</span>
+<span class="s0">import </span><span class="s1">java.util.concurrent.TimeUnit;</span>
+
+
+<span class="s0">public  class </span><span class="s1">SeleniumTutorial {</span>
+    <span class="s0">public static </span><span class="s1">WebDriver driver;</span>
+
+    <span class="s0">public void </span><span class="s1">launchBrowserAndApplication() </span><span class="s0">throws </span><span class="s1">InterruptedException {</span>
+
+        <span class="s1">WebDriverManager.chromedriver().setup();</span>
+        <span class="s2">// It will launch browser</span>
+        <span class="s1">WebDriver driver = </span><span class="s0">new </span><span class="s1">ChromeDriver();</span>
+        <span class="s1">driver.manage().window().maximize();</span>
+        <span class="s2">// It will launch application</span>
+        <span class="s1">driver.get(</span><span class="s3">&quot;https://www.saucedemo.com/v1/index.html&quot;</span><span class="s1">);</span>
+
+        <span class="s1">Thread.sleep(</span><span class="s4">3000</span><span class="s1">);</span>
+
+        <span class="s2">// Entering username</span>
+        <span class="s2">// Identify username locator with 'id'</span>
+        <span class="s2">//WebElement username = driver.findElement(By.id(&quot;user-name&quot;));</span>
+        <span class="s2">//Identify username locator with 'xpath'</span>
+        <span class="s1">WebElement username = driver.findElement(By.xpath(</span><span class="s3">&quot;//input[@name='user-name']&quot;</span><span class="s1">));</span>
+        <span class="s1">username.sendKeys(</span><span class="s3">&quot;standard_user&quot;</span><span class="s1">);</span>
+
+        <span class="s2">// Entering password</span>
+        <span class="s1">WebElement pass = driver.findElement(By.id(</span><span class="s3">&quot;password&quot;</span><span class="s1">));</span>
+        <span class="s1">pass.sendKeys(</span><span class="s3">&quot;secret_sauce&quot;</span><span class="s1">);</span>
+
+
+        <span class="s2">// Clicking on login button</span>
+        <span class="s1">WebElement loginButton = driver.findElement(By.id(</span><span class="s3">&quot;login-button&quot;</span><span class="s1">));</span>
+        <span class="s1">loginButton.click();</span>
+        <span class="s2">//explicitwait</span>
+        <span class="s1">WebDriverWait wait = </span><span class="s0">new </span><span class="s1">WebDriverWait(driver, Duration.ofSeconds(</span><span class="s4">30</span><span class="s1">));</span>
+        <span class="s1">wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(</span><span class="s3">&quot;//div[@class = 'app_logo']&quot;</span><span class="s1">)));</span>
+
+        <span class="s2">// driver.close();</span>
+        <span class="s1">String expURL = </span><span class="s3">&quot;https://www.saucedemo.com/v1/inventory.html&quot;</span><span class="s1">;</span>
+        <span class="s1">String actURL = driver.getCurrentUrl();</span>
+
+        <span class="s0">if </span><span class="s1">(expURL.equals(actURL)) {</span>
+            <span class="s1">System.out.println(</span><span class="s3">&quot;Login is successful with valid credentials&quot;</span><span class="s1">);</span>
+        <span class="s1">} </span><span class="s0">else </span><span class="s1">{</span>
+            <span class="s1">System.out.println(</span><span class="s3">&quot;Login is unsuccessful with valid credentials&quot;</span><span class="s1">);</span>
+            <span class="s1">Thread.sleep(</span><span class="s4">3000</span><span class="s1">);</span>
+        <span class="s1">}</span>
+    <span class="s1">}</span>
+
+    <span class="s0">public void </span><span class="s1">filterPrice() </span><span class="s0">throws </span><span class="s1">InterruptedException {</span>
+
+        <span class="s1">WebElement filterPriceDropDown = driver.findElement(By.xpath(</span><span class="s3">&quot;//select[@class='product_sort_container']&quot;</span><span class="s1">));</span>
+        <span class="s1">filterPriceDropDown.click();</span>
+        <span class="s1">Select st = </span><span class="s0">new </span><span class="s1">Select(filterPriceDropDown);</span>
+        <span class="s1">st.selectByValue(</span><span class="s3">&quot;za&quot;</span><span class="s1">);</span>
+        <span class="s2">//st.selectByIndex(3);</span>
+        <span class="s2">// st.selectByVisibleText(&quot;Name (Z to A)&quot;);</span>
+        <span class="s1">Thread.sleep(</span><span class="s4">3000</span><span class="s1">);</span>
+
+    <span class="s1">}</span>
+
+
+    <span class="s0">public void </span><span class="s1">loginWithRobotClass() </span><span class="s0">throws </span><span class="s1">InterruptedException, AWTException {</span>
+
+        <span class="s1">WebDriverManager.chromedriver().setup();</span>
+        <span class="s2">// It will launch browser</span>
+        <span class="s1">WebDriver driver = </span><span class="s0">new </span><span class="s1">ChromeDriver();</span>
+        <span class="s1">driver.manage().window().maximize();</span>
+        <span class="s2">// It will launch application</span>
+        <span class="s1">driver.get(</span><span class="s3">&quot;https://www.saucedemo.com/v1/index.html&quot;</span><span class="s1">);</span>
+
+        <span class="s1">Thread.sleep(</span><span class="s4">4000</span><span class="s1">);</span>
+        <span class="s1">Robot robot = </span><span class="s0">new </span><span class="s1">Robot();</span>
+        <span class="s1">WebElement username = driver.findElement(By.xpath(</span><span class="s3">&quot;//input[@name='user-name']&quot;</span><span class="s1">));</span>
+        <span class="s1">username.sendKeys(</span><span class="s3">&quot;standard_user&quot;</span><span class="s1">);</span>
+        <span class="s1">robot.keyPress(KeyEvent.VK_TAB);</span>
+        <span class="s2">//txtEmailAddress.sendKeys(&quot;subhendudas8014@gmail.com&quot;);</span>
+        <span class="s1">WebElement pass = driver.findElement(By.id(</span><span class="s3">&quot;password&quot;</span><span class="s1">));</span>
+        <span class="s1">pass.sendKeys(</span><span class="s3">&quot;secret_sauce&quot;</span><span class="s1">);</span>
+        <span class="s1">robot.keyPress(KeyEvent.VK_TAB);</span>
+
+        <span class="s1">robot.keyPress(KeyEvent.VK_ENTER);</span>
+        <span class="s1">Thread.sleep(</span><span class="s4">5000</span><span class="s1">);</span>
+
+
+    <span class="s1">}</span>
+
+
+    <span class="s0">public void </span><span class="s1">loginWithPropertyFileData() </span><span class="s0">throws </span><span class="s1">InterruptedException, IOException {</span>
+        <span class="s1">WebDriverManager.chromedriver().setup();</span>
+        <span class="s2">// It will launch browser</span>
+        <span class="s1">WebDriver driver = </span><span class="s0">new </span><span class="s1">ChromeDriver();</span>
+        <span class="s1">driver.manage().window().maximize();</span>
+        <span class="s2">// It will launch application</span>
+        <span class="s1">driver.get(</span><span class="s3">&quot;https://www.saucedemo.com/v1/index.html&quot;</span><span class="s1">);</span>
+        <span class="s2">//implicitwait</span>
+        <span class="s1">driver.manage().timeouts().implicitlyWait(</span><span class="s4">5</span><span class="s1">, TimeUnit.SECONDS);</span>
+        <span class="s2">//Thread.sleep(4000);</span>
+        <span class="s1">FileReader reader = </span><span class="s0">new </span><span class="s1">FileReader(</span><span class="s3">&quot;./testdata/testdata.properties&quot;</span><span class="s1">);</span>
+        <span class="s1">Properties props = </span><span class="s0">new </span><span class="s1">Properties();</span>
+        <span class="s1">props.load(reader);</span>
+        <span class="s1">String uname = props.getProperty(</span><span class="s3">&quot;username&quot;</span><span class="s1">);</span>
+        <span class="s1">String pwd = props.getProperty(</span><span class="s3">&quot;password&quot;</span><span class="s1">);</span>
+        <span class="s1">WebElement username = driver.findElement(By.xpath(</span><span class="s3">&quot;//input[@name='user-name']&quot;</span><span class="s1">));</span>
+        <span class="s1">username.sendKeys(uname);</span>
+        <span class="s1">WebElement pass = driver.findElement(By.id(</span><span class="s3">&quot;password&quot;</span><span class="s1">));</span>
+        <span class="s1">pass.sendKeys(pwd);</span>
+
+        <span class="s1">WebElement loginButton = driver.findElement(By.id(</span><span class="s3">&quot;login-button&quot;</span><span class="s1">));</span>
+        <span class="s1">loginButton.click();</span>
+
+
+    <span class="s1">}</span>
+
+    <span class="s0">public void </span><span class="s1">iframeHandling() </span><span class="s0">throws </span><span class="s1">InterruptedException, IOException {</span>
+        <span class="s1">WebDriverManager.chromedriver().setup();</span>
+        <span class="s2">// It will launch browser</span>
+        <span class="s1">WebDriver driver = </span><span class="s0">new </span><span class="s1">ChromeDriver();</span>
+        <span class="s1">driver.manage().window().maximize();</span>
+        <span class="s2">// It will launch application</span>
+        <span class="s1">driver.get(</span><span class="s3">&quot;https://demo.guru99.com/test/guru99home/&quot;</span><span class="s1">);</span>
+        <span class="s1">WebDriverWait wait = </span><span class="s0">new </span><span class="s1">WebDriverWait(driver, Duration.ofSeconds(</span><span class="s4">20</span><span class="s1">));</span>
+        <span class="s1">wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(</span><span class="s3">&quot;//div[@class= 'rt-logo-block']&quot;</span><span class="s1">)));</span>
+        <span class="s1">driver.switchTo().frame(</span><span class="s3">&quot;a077aa5e&quot;</span><span class="s1">);</span>
+
+        <span class="s1">WebElement imageInFrame = driver.findElement(By.xpath(</span><span class="s3">&quot;//img[@src = 'Jmeter720.png']&quot;</span><span class="s1">));</span>
+        <span class="s1">JavascriptExecutor js = (JavascriptExecutor) driver;</span>
+        <span class="s1">js.executeScript(</span><span class="s3">&quot;arguments[0].scrollIntoView();&quot;</span><span class="s1">, imageInFrame);</span>
+        <span class="s1">driver.manage().timeouts().implicitlyWait(</span><span class="s4">5</span><span class="s1">, TimeUnit.SECONDS);</span>
+        <span class="s1">imageInFrame.click();</span>
+        <span class="s1">driver.switchTo().defaultContent();</span>
+
+
+    <span class="s1">}</span>
+
+    <span class="s0">public void </span><span class="s1">popupHandling() {</span>
+        <span class="s1">WebDriverManager.chromedriver().setup();</span>
+        <span class="s2">// It will launch browser</span>
+        <span class="s1">WebDriver driver = </span><span class="s0">new </span><span class="s1">ChromeDriver();</span>
+        <span class="s1">driver.manage().window().maximize();</span>
+        <span class="s2">// It will launch application</span>
+        <span class="s1">driver.get(</span><span class="s3">&quot;https://demo.guru99.com/test/delete_customer.php&quot;</span><span class="s1">);</span>
+        <span class="s1">WebElement username = driver.findElement(By.xpath(</span><span class="s3">&quot;//input[@name = 'cusid']&quot;</span><span class="s1">));</span>
+        <span class="s1">username.sendKeys(</span><span class="s3">&quot;53920&quot;</span><span class="s1">);</span>
+        <span class="s1">WebElement submit = driver.findElement(By.xpath(</span><span class="s3">&quot;//input[@name = 'submit']&quot;</span><span class="s1">));</span>
+        <span class="s1">submit.click();</span>
+        <span class="s1">Alert alert = driver.switchTo().alert();</span>
+        <span class="s1">String alertMessage = driver.switchTo().alert().getText();</span>
+        <span class="s1">System.out.println(alertMessage);</span>
+        <span class="s1">driver.manage().timeouts().implicitlyWait(</span><span class="s4">5</span><span class="s1">,TimeUnit.SECONDS);</span>
+        <span class="s1">alert.accept();</span>
+
+      <span class="s2">//  alert.dismiss();</span>
+
+
+    <span class="s1">}</span>
+    <span class="s0">public void </span><span class="s1">usingActionClass() </span><span class="s0">throws </span><span class="s1">InterruptedException {</span>
+
+        <span class="s1">WebDriverManager.chromedriver().setup();</span>
+        <span class="s2">// It will launch browser</span>
+        <span class="s1">WebDriver driver = </span><span class="s0">new </span><span class="s1">ChromeDriver();</span>
+        <span class="s1">driver.manage().window().maximize();</span>
+        <span class="s2">// It will launch application</span>
+        <span class="s1">driver.get(</span><span class="s3">&quot;https://www.saucedemo.com/v1/index.html&quot;</span><span class="s1">);</span>
+
+        <span class="s1">driver.manage().timeouts().implicitlyWait(</span><span class="s4">5</span><span class="s1">, TimeUnit.SECONDS);</span>
+
+        <span class="s1">WebElement username = driver.findElement(By.xpath(</span><span class="s3">&quot;//input[@name='user-name']&quot;</span><span class="s1">));</span>
+        <span class="s1">username.sendKeys(</span><span class="s3">&quot;standard_user&quot;</span><span class="s1">);</span>
+
+        <span class="s2">// Entering password</span>
+        <span class="s1">WebElement pass = driver.findElement(By.id(</span><span class="s3">&quot;password&quot;</span><span class="s1">));</span>
+        <span class="s1">pass.sendKeys(</span><span class="s3">&quot;secret_sauce&quot;</span><span class="s1">);</span>
+
+
+        <span class="s2">// Clicking on login button</span>
+        <span class="s1">WebElement loginButton = driver.findElement(By.id(</span><span class="s3">&quot;login-button&quot;</span><span class="s1">));</span>
+        <span class="s1">Actions act1 = </span><span class="s0">new </span><span class="s1">Actions(driver);</span>
+        <span class="s1">act1.click(loginButton).build().perform();</span>
+    <span class="s1">}</span>
+<span class="s1">}</span></pre>
+</body>
+</html>
