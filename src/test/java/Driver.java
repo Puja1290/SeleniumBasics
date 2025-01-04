@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.jar.JarEntry;
 
 public class Driver {
+    //this is driver class
     public static void main(String[] args) throws InterruptedException, SQLException, ClassNotFoundException, AWTException, IOException {
 
         //JavaTutorial jt = new JavaTutorial();
